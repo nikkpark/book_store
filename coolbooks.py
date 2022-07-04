@@ -119,7 +119,7 @@ if __name__ == '__main__':
         status = 'Want to read'
         pages = 583
         edition = "Second"
-        narrator = 'V. Putin'
+        narrator = 'T.Hanks'
         length = '1:23:45'
 
         pbook = PaperBook(name, author, language, year, 'finished', pages, edition)
@@ -134,9 +134,9 @@ if __name__ == '__main__':
         #itemcopy = worker.read_book_item('Nothing')
         #print(itemcopy)
         #print(item)
-        # status = worker.delete_book_item('Jesus')
+        # status = worker.delete_book_item('Kon-tiki')
         # print('Deleted: ', status)
-        # status = worker.delete_book_item('Jesus')
+        # status = worker.delete_book_item('Kon-tiki')
         # print('Deleted: ',  status)
         print(worker.read_book_item('lol'))
         worker.update_book_item('lol')
