@@ -1,6 +1,7 @@
 """
 The module contains classes to make book records
 """
+import shelve
 
 
 class Book:
@@ -41,6 +42,8 @@ class AudioBook(Book):
 
 
 class Librarian:
+    bookshelf_filename = 'bookshelf'
+
     def create_book_item(self):
         book_data = []
 
@@ -49,7 +52,6 @@ class Librarian:
         book_data.append(input('Book name: '))
         book_data.append(input('Author:'))
         book_data.append(input('Language: '))
-        book_data.append(input('Status: '))
         while True:
             try:
                 year = int(input('Year: '))
@@ -57,6 +59,7 @@ class Librarian:
             except ValueError:
                 print('Year must be a number.')
                 continue
+        book_data.append(input('Status: '))
 
         if booktype == 'Paper':
             while True:
@@ -72,20 +75,40 @@ class Librarian:
         elif booktype == 'Audio':
             book_data.append(input('Narrator: '))
             book_data.append(input('Length(00:00:00): '))
-            return PaperBook(*book_data)
+            return AudioBook(*book_data)
 
-    def read_book_item(self):
-        pass
+    def shelve_book_item(self, book, filename=bookshelf_filename):
+        with shelve.open(filename) as shelf:
+            shelf[book.name] = book
 
-    def update_book_item(self):
-        pass
+    def read_book_item(self, book_name, filename=bookshelf_filename):
+        with shelve.open(filename) as shelf:
+            try:
+                return shelf[book_name]
+            except KeyError:
+                print('No such book on shelf.')
+                return None
 
-    def delete_book_item(self):
-        pass
+    def update_book_item(self, book_name, filename=bookshelf_filename):
+        with shelve.open(filename, writeback=True) as shelf:
+            try:
+                book = shelf[book_name]
+                field_to_change = input("What info do you want to change?\n" + str(list(book.__dict__.keys())) + ' ')
+                given_value = input(field_to_change + '| new value: ')
+                setattr(book, field_to_change, given_value)
 
-    def __get_book_data(self) -> dict:
-        pass
+            except KeyError:
+                print('No such book on shelf.')
+                return None
 
+    def delete_book_item(self, book_name, filename=bookshelf_filename):
+        with shelve.open(filename) as shelf:
+            try:
+                del shelf[book_name]
+                return True
+            except KeyError:
+                print('No such book on shelf. Nothing to delete.')
+                return False
 
 if __name__ == '__main__':
     def main():
@@ -106,8 +129,18 @@ if __name__ == '__main__':
         #print(abook)
 
         worker = Librarian()
-        item = worker.create_book_item()
-        print(item)
+        #item = worker.create_book_item()
+        #worker.shelve_book_item(item)
+        #itemcopy = worker.read_book_item('Nothing')
+        #print(itemcopy)
+        #print(item)
+        # status = worker.delete_book_item('Jesus')
+        # print('Deleted: ', status)
+        # status = worker.delete_book_item('Jesus')
+        # print('Deleted: ',  status)
+        print(worker.read_book_item('lol'))
+        worker.update_book_item('lol')
+        print(worker.read_book_item('lol'))
 
 
     main()
