@@ -76,6 +76,8 @@ class Librarian:
             book_data.append(input('Narrator: '))
             book_data.append(input('Length(00:00:00): '))
             return AudioBook(*book_data)
+        else:
+            return None
 
     def shelve_book_item(self, book, filename=bookshelf_filename):
         with shelve.open(filename) as shelf:
@@ -110,6 +112,7 @@ class Librarian:
                 print('No such book on shelf. Nothing to delete.')
                 return False
 
+
 if __name__ == '__main__':
     def main():
         name = 'Awesome Book'
@@ -125,22 +128,7 @@ if __name__ == '__main__':
         pbook = PaperBook(name, author, language, year, 'finished', pages, edition)
         abook = AudioBook(name, author, language, year, status, narrator, length)
 
-        #print(pbook)
-        #print(abook)
-
-        worker = Librarian()
-        #item = worker.create_book_item()
-        #worker.shelve_book_item(item)
-        #itemcopy = worker.read_book_item('Nothing')
-        #print(itemcopy)
-        #print(item)
-        # status = worker.delete_book_item('Kon-tiki')
-        # print('Deleted: ', status)
-        # status = worker.delete_book_item('Kon-tiki')
-        # print('Deleted: ',  status)
-        print(worker.read_book_item('lol'))
-        worker.update_book_item('lol')
-        print(worker.read_book_item('lol'))
-
+        print(pbook)
+        print(abook)
 
     main()
